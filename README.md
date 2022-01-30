@@ -1,4 +1,11 @@
 # Java training
 
 - Projeto OSF Digital Academy.
-- CRUD REST utilizando Spring Boot, Java 11, Spring Data, Spring Validation e Banco Relacional MySQL 8.
+- CRUD REST utilizando:
+  - Java 11
+  - Spring Boot
+  - Spring Data JPA
+  - Hibernate
+  - Bean Validation 
+  - Banco Relacional MySQL 8
+
