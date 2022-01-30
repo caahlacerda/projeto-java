@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.osf.digital.staff.repository.StaffRepository;
+import com.osf.digital.staff.controller.dto.StaffDto;
+import com.osf.digital.staff.controller.form.AtualizaçãoStaffForm;
+import com.osf.digital.staff.controller.form.StaffForm;
+import com.osf.digital.staff.model.Staff;
+import com.osf.digital.staff.repository.StaffsRepository;
 
 
 	@RestController
@@ -27,36 +31,36 @@ import com.osf.digital.staff.repository.StaffRepository;
 	public class StaffController {
 
 		@Autowired
-		private StaffRepository staffRepository;
+		private StaffsRepository staffsRepository;
 
 		@GetMapping
-		public List<StaffDto> lista(String cidade) {
-			if (cidade == null) {
-				List<Staff> Staffs = staffsRepository.findAll();
+		public List<StaffDto> lista(String name) {
+			if (name == null) {
+				List<Staff> staffs = staffsRepository.findAll();
 				return StaffDto.converter(staffs);
 
 			} else {
-				List<Staff> staffs = staffsRepository.findByCidade(cidade);
+				List<Staff> staffs = staffsRepository.findByName(name);
 				return StaffDto.converter(staffs);
 			}
 		}
 
 		@PostMapping
-		public ResponseEntity<LojaDto> adicionarProdutos(@RequestBody @Valid LojaForm lojaForm,
+		public ResponseEntity<StaffDto> adicionarProdutos(@RequestBody @Valid StaffForm staffForm,
 				UriComponentsBuilder uriBuilder) {
-			Loja loja = lojaForm.converter(lojasRepository);
-			lojasRepository.save(loja);
+			Staff staff = staffForm.converter(staffsRepository);
+			staffsRepository.save(staff);
 
-			URI uri = uriBuilder.path("/lojas/{id}").buildAndExpand(loja.getId()).toUri();
-			return ResponseEntity.created(uri).body(new LojaDto(loja));
+			URI uri = uriBuilder.path("/lojas/{id}").buildAndExpand(staff.getId()).toUri();
+			return ResponseEntity.created(uri).body(new StaffDto(staff));
 
 		}
 
 		@GetMapping("/{id}")
-		public ResponseEntity<LojaDto> detalhar(@PathVariable Long id) {
-			Optional<Loja> loja = lojasRepository.findById(id);
-			if (loja.isPresent()) {
-				return ResponseEntity.ok(new LojaDto(loja.get()));
+		public ResponseEntity<StaffDto> detalhar(@PathVariable Long id) {
+			Optional<Staff> staff = staffsRepository.findById(id);
+			if (staff.isPresent()) {
+				return ResponseEntity.ok(new StaffDto(staff.get()));
 			}
 
 			return ResponseEntity.notFound().build();
@@ -64,11 +68,11 @@ import com.osf.digital.staff.repository.StaffRepository;
 
 		@PutMapping("/{id}")
 		@Transactional
-		public ResponseEntity<LojaDto> atualizar(@PathVariable Long id, @RequestBody AtualizaçãoLojaForm form) {
-			Optional<Loja> optional = lojasRepository.findById(id);
+		public ResponseEntity<StaffDto> atualizar(@PathVariable Long id, @RequestBody AtualizaçãoStaffForm form) {
+			Optional<Staff> optional = staffsRepository.findById(id);
 			if (optional.isPresent()) {
-				Loja loja = form.atualizar(id, lojasRepository);
-				return ResponseEntity.ok(new LojaDto(loja));
+				Staff staff = form.atualizar(id, staffsRepository);
+				return ResponseEntity.ok(new StaffDto(staff));
 			}
 
 			return ResponseEntity.notFound().build();
@@ -77,9 +81,9 @@ import com.osf.digital.staff.repository.StaffRepository;
 		@DeleteMapping("/{id}")
 		@Transactional
 		public ResponseEntity<?> remover(@PathVariable Long id) {
-			Optional<Loja> optional = lojasRepository.findById(id);
+			Optional<Staff> optional = staffsRepository.findById(id);
 			if (optional.isPresent()) {
-				lojasRepository.deleteById(id);
+				staffsRepository.deleteById(id);
 				return ResponseEntity.ok().build();
 			}
 
@@ -87,5 +91,3 @@ import com.osf.digital.staff.repository.StaffRepository;
 		}
 
 	}
-
-}
