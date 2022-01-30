@@ -16,9 +16,6 @@ public class AtualizaçãoLojaForm {
 	private String estado;
 	@NotNull
 	private String cidade;
-	@NotNull
-	@NotEmpty
-	private Long cnpj;
 	
 	
 	public String getName() {
@@ -39,19 +36,13 @@ public class AtualizaçãoLojaForm {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public Long getCnpj() {
-		return cnpj;
-	}
-	public void setCnpj(Long cnpj) {
-		this.cnpj = cnpj;
-	}
+
 	public Loja atualizar(Long id, LojasRepository lojasRepository) {
 		Loja loja = lojasRepository.getById(id);
 
 		loja.setName(this.name);
 		loja.setEstado(this.estado);
 		loja.setCidade(this.cidade);
-		loja.setCnpj(this.cnpj);
 
 		return loja;
 	}

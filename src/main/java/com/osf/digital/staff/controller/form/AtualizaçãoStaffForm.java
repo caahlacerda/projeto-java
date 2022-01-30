@@ -9,27 +9,13 @@ import com.osf.digital.staff.repository.StaffsRepository;
 
 public class AtualizaçãoStaffForm {
 
-	@NotNull
-	@NotEmpty
-	private String name;
+
 	@NotNull
 	private String cargo;
 	@NotNull
 	@NotEmpty
 	private String setor;
 	
-
-	public String getName() {
-		return name;
-	}
-
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
 
 	public String getCargo() {
 		return cargo;
@@ -58,7 +44,6 @@ public class AtualizaçãoStaffForm {
 	public Staff atualizar(Long id, StaffsRepository staffsRepository) {
 		Staff staff = staffsRepository.getById(id);
 
-		staff.setName(this.name);
 		staff.setCargo(this.cargo);
 		staff.setSetor(this.setor);
 
